@@ -18,10 +18,10 @@ class UserViewSet(viewsets.ViewSet,
     serializer_class = UserSerializer
     parser_classes = [MultiPartParser, ]
 
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return [permissions.IsAuthenticated()]
-        return [permissions.AllowAny()]
+    # def get_permissions(self):
+    #     if self.action == 'retrieve':
+    #         return [permissions.IsAuthenticated()]
+    #     return [permissions.AllowAny()]
 
 
 # Create your views here.
