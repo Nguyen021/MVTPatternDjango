@@ -1,11 +1,29 @@
 from rest_framework.decorators import action
 from rest_framework.serializers import ModelSerializer
 from .models import *
-from rest_framework.response import Response
-from rest_framework import status
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'username', 'password', 'avatar', 'email']
+
+    def create(self, validated_data):
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
+
+class CategorySerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']
 
 
 class CourseSerializer(ModelSerializer):
+    category = CategorySerializer()
+
     class Meta:
         model = Course
         fields = ['id', 'subject', 'image', 'created_date', 'updated_date', 'category']
@@ -18,18 +36,11 @@ class TagSerializers(ModelSerializer):
 
 
 class LessonSerializers(ModelSerializer):
+    """
+      A viewset for viewing and editing user instances.
+    """
     tags = TagSerializers(many=True)
 
     class Meta:
         model = Lesson
-        fields = ['id', 'subject', 'content', 'created_date', 'course', 'tags']
-
-    @action(methods=['post'], detail=True, url_path="hide-lesson", url_name="hide-lesson")
-    def hide_lesson(self, request, pk):
-        try:
-            l = Lesson.objects.get(pk=pk)
-            l.active = False
-            l.save()
-        except Lesson.DoesNotExits:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(data=LessonSerializers(l).data, status=status.HTTP_200_OK)
+        fields = ['id', 'subject', 'image', 'content', 'created_date', 'course', 'tags']

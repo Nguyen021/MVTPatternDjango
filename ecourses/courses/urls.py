@@ -6,11 +6,11 @@ from .admin import admin_site
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('Course', views.CourseViewSet)
-
-router.register('Lesson', views.LessonViewSet)
-
+router.register('course', views.CourseViewSet)
+router.register('lesson', views.LessonViewSet)
+router.register('user', views.UserViewSet)
 urlpatterns = [
+    # path('', views.LessonViewSet({'get': 'hide_lesson'}), name='hide_lesson')
     path('', include(router.urls)),
     # path('', views.index, name="index"),
     path('welcome/<int:year>/', views.welcome, name="welcome"),

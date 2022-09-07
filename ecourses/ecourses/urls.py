@@ -18,6 +18,8 @@ from django.urls import path, include, re_path
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
+
     path('', include('courses.urls')),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     re_path(r'ckeditor/', include('ckeditor_uploader.urls'))
 ]
